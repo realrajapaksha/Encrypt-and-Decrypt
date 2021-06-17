@@ -10,8 +10,8 @@
 ****************** RSA Encrypt and Decrypt ******************
 
 Source
-- GitHub CLI :	gh repo clone realrajapaksha/Encrypt-and-Decrypt
-- HTTPS :	https://github.com/realrajapaksha/Encrypt-and-Decrypt.git
+- GitHub CLI	:	gh repo clone realrajapaksha/Encrypt-and-Decrypt
+- HTTPS		:	https://github.com/realrajapaksha/Encrypt-and-Decrypt.git
 
 
 This is a simple text file encrypt and decrypt program with an RSA algorithm.
@@ -59,6 +59,7 @@ Finally, decrypt text save to 'rePlainText.txt' file.
 RSA is a public-key cryptosystem that is widely used for secure data transmission.
 You can simulate how it works. We can get separate error logs after damage keystore.jks or EncryptText file.
 So, we can assume to decrypt the encrypted text, just need to have a valid private key.
+
 
 Thank you!
 @realrajapaksha
