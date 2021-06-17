@@ -83,7 +83,6 @@ public class Main extends MyLogger {
     private static PublicKey getPublicKeyFromKeyStore(String keyFile) {
         KeyStore keyStore = null;
         PublicKey publicKey = null;
-        KeyStore.PrivateKeyEntry privateKeyEntry;
         Certificate cert = null;
         InputStream ins = null;
 
