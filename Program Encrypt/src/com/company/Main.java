@@ -12,30 +12,45 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author RAJAPAKSHA
+ * @created 28/05/2021/ - 12:15 PM
+ * @project Program Encrypt
+ **/
+
 public class Main extends MyLogger {
 
     public static void main(String[] args) {
+
+        //Import and configure log4j Logger
         String log4jConfPath = "classes/log4j.properties";
         PropertyConfigurator.configure(log4jConfPath);
         BasicConfigurator.configure();
 
+        //File names store in array
         String[] fileName = new String[3];
-
         fileName[0] = "keystore.jks";
         fileName[1] = "plainText.txt";
         fileName[2] = "EncryptText";
 
+        //Read plainTextFile
         String plainText = readTextFile(fileName[1]);
 
         if (!plainText.equals("")) {
             if (isString(plainText)) {
                 logger("Successful all plain text are alphabet characters and spaces.", 1);
+
+                //Get the public key using keystore.jks filename
                 PublicKey publicKey = getPublicKeyFromKeyStore(fileName[0]);
                 if (publicKey != null) {
                     logger("Successful get public key.", 1);
+
+                    //Encrypt the plain Text
                     Encrypt encrypt = new Encrypt();
                     String encryptText = encrypt.encrypt(plainText, publicKey);
                     if (!encryptText.equals("")) {
+
+                        //Save Encrypted text to new file
                         if (saveEncryptTextFile(fileName[2], encryptText)) {
                             logger("Your Text File is Successfully Encrypted. Now Try to Run Decryption Program..!", 1);
                             logger("--------------- Thank You..! ---------------", 1);
@@ -56,6 +71,7 @@ public class Main extends MyLogger {
         }
     }
 
+    //Read plain Text file
     private static String readTextFile(String fileName) {
         String plainText = "";
         try {
@@ -74,13 +90,19 @@ public class Main extends MyLogger {
         return plainText;
     }
 
+    //Check all characters are with space A-Z or a-z with regex
     private static boolean isString(String s) {
         Pattern p = Pattern.compile("^[ A-Za-z]+$");
         Matcher m = p.matcher(s);
         return m.matches();
     }
 
+    //Get the public key from keystore file
     private static PublicKey getPublicKeyFromKeyStore(String keyFile) {
+        //following comment is used to generate the keystore.jks file with my details.
+        //keytool -genkeypair -alias induwara -storepass realrajapaksha -keypass realrajapaksha -keyalg RSA -keystore keystore.jks
+        //You can change with your own details and after you must change below code.
+
         KeyStore keyStore = null;
         PublicKey publicKey = null;
         Certificate cert = null;
@@ -101,15 +123,15 @@ public class Main extends MyLogger {
             }
 
             try {
+                //'realrajapaksha' is -storepass in above keystore file generate code
                 keyStore.load(ins, "realrajapaksha".toCharArray());
                 logger("Successful keystore load with password.", 1);
             } catch (IOException | NoSuchAlgorithmException | NullPointerException | CertificateException e) {
                 logger("Key Store Load fail. Please check the 'keystore.jks' file. " + e, 3);
             }
 
-            KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection("realrajapaksha".toCharArray());
-
             try {
+                //'induwara' is -alias in above keystore file generate code
                 cert = keyStore.getCertificate("induwara");
                 logger("Successful get keystore certificate.", 1);
             } catch (KeyStoreException e) {
@@ -129,6 +151,7 @@ public class Main extends MyLogger {
         return publicKey;
     }
 
+    //Save all encrypted characters to file
     private static boolean saveEncryptTextFile(String fileName, String encryptText) {
         try {
             FileWriter fileWriter = new FileWriter("../res/" + fileName);

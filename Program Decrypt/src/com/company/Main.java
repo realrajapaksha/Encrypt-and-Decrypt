@@ -13,27 +13,43 @@ import java.util.Scanner;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+/**
+ * @author RAJAPAKSHA
+ * @created 28/05/2021/ - 12:40 PM
+ * @project Program Decrypt
+ **/
+
 public class Main extends MyLogger {
 
     public static void main(String[] args) {
+
+        //Import and configure log4j Logger
         String log4jConfPath = "classes/log4j.properties";
         PropertyConfigurator.configure(log4jConfPath);
         BasicConfigurator.configure();
 
+        //File names store in array
         String[] fileName = new String[3];
-
         fileName[0] = "keystore.jks";
         fileName[1] = "EncryptText";
         fileName[2] = "rePlainText.txt";
 
-        String encryptText = readTextFile(fileName[1]);
+        //Read encryptText
+        String encryptText = readEncryptFile(fileName[1]);
+
         if (!encryptText.equals("")) {
+
+            //Get the private key using keystore.jks filename
             PrivateKey privateKey = getPrivateKeyFromKeyStore(fileName[0]);
             if (privateKey != null) {
                 logger("Successful get private key.", 1);
+
+                //Decrypt the encryptText
                 Decrypt decrypt = new Decrypt();
                 String rePlainText = decrypt.decrypt(encryptText, privateKey);
                 if (!rePlainText.equals("")) {
+
+                    //Save Encrypted text to new file
                     if (saveRePlainText(fileName[2], rePlainText)) {
                         logger("Encrypted Plain Text is: " + rePlainText, 1);
                         logger("Your Encrypted File is Successfully Decrypted and Saved.", 1);
@@ -52,7 +68,8 @@ public class Main extends MyLogger {
         }
     }
 
-    private static String readTextFile(String fileName) {
+    //Read encryptText
+    private static String readEncryptFile(String fileName) {
         String encryptText = "";
         try {
             File file = new File("../res/" + fileName);
@@ -70,7 +87,12 @@ public class Main extends MyLogger {
         return encryptText;
     }
 
+    //Get the private key from keystore file
     public static PrivateKey getPrivateKeyFromKeyStore(String keyFile) {
+        //following comment is used to generate the keystore.jks file with my details.
+        //keytool -genkeypair -alias induwara -storepass realrajapaksha -keypass realrajapaksha -keyalg RSA -keystore keystore.jks
+        //You can change with your own details and after you must change below code.
+
         KeyStore keyStore = null;
         KeyStore.PrivateKeyEntry privateKeyEntry = null;
         InputStream ins = null;
@@ -91,15 +113,18 @@ public class Main extends MyLogger {
             }
 
             try {
+                //'realrajapaksha' is -storepass in above keystore file generate code
                 keyStore.load(ins, "realrajapaksha".toCharArray());
                 logger("Successful keystore load with password.", 1);
             } catch (IOException | NoSuchAlgorithmException | NullPointerException | CertificateException e) {
                 logger("Key Store Load fail. Please check the 'keystore.jks' file. " + e, 3);
             }
 
+            //'realrajapaksha' is -keypass in above keystore file generate code
             KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection("realrajapaksha".toCharArray());
 
             try {
+                //'induwara' is -alias in above keystore file generate code
                 privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry("induwara", keyPassword);
             } catch (NoSuchAlgorithmException | UnrecoverableEntryException | KeyStoreException e) {
                 logger("Key Store file error. Please check file and rerun program.", 3);
@@ -138,6 +163,7 @@ public class Main extends MyLogger {
         return publicSignature.verify(signatureBytes);
     }
 
+    //Save all encrypted characters to file
     private static boolean saveRePlainText(String fileName, String rePlainText) {
         try {
             FileWriter fileWriter = new FileWriter("../res/" + fileName);

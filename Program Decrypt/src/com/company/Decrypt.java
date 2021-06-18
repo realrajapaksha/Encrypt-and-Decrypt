@@ -11,6 +11,12 @@ import java.util.Base64;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+/**
+ * @author RAJAPAKSHA
+ * @created 28/05/2021/ - 12:42 PM
+ * @project Program Decrypt
+ **/
+
 public class Decrypt extends MyLogger {
     public String decrypt(String cipherText, PrivateKey privateKey) {
         Cipher decryptCipher = null;
