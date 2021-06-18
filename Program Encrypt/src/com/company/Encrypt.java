@@ -9,6 +9,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.Base64;
 
+/**
+ * @author RAJAPAKSHA
+ * @created 28/05/2021/ - 12:20 PM
+ * @project Program Encrypt
+ **/
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Encrypt extends MyLogger {
